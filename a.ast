@@ -1,0 +1,44 @@
+|-RecordDecl 0x16d6180 <a.c:3:1, line:8:1> line:3:8 struct s definition
+| |-FieldDecl 0x16d6238 <line:5:5, col:9> col:9 referenced a 'int'
+| |-FieldDecl 0x16d62a0 <line:6:5, col:18> col:18 referenced b 'unsigned int'
+| `-FieldDecl 0x16d6300 <line:7:5, col:10> col:10 referenced c 'char'
+`-FunctionDecl 0x16d63a0 <line:10:1, line:18:1> line:10:5 main 'int ()'
+  `-CompoundStmt 0x16d7310 <line:11:1, line:18:1>
+    |-DeclStmt 0x16d64f8 <line:12:5, col:15>
+    | `-VarDecl 0x16d6490 <col:5, col:14> col:14 used x 'struct s':'struct s'
+    |-BinaryOperator 0x16d6580 <line:13:5, col:11> 'int' '='
+    | |-MemberExpr 0x16d6530 <col:5, col:7> 'int' lvalue .a 0x16d6238
+    | | `-DeclRefExpr 0x16d6510 <col:5> 'struct s':'struct s' lvalue Var 0x16d6490 'x' 'struct s':'struct s'
+    | `-IntegerLiteral 0x16d6560 <col:11> 'int' 1
+    |-BinaryOperator 0x16d6f80 <line:14:5, col:11> 'unsigned int' '='
+    | |-MemberExpr 0x16d6f18 <col:5, col:7> 'unsigned int' lvalue .b 0x16d62a0
+    | | `-DeclRefExpr 0x16d6ef8 <col:5> 'struct s':'struct s' lvalue Var 0x16d6490 'x' 'struct s':'struct s'
+    | `-ImplicitCastExpr 0x16d6f68 <col:11> 'unsigned int' <IntegralCast>
+    |   `-IntegerLiteral 0x16d6f48 <col:11> 'int' 2
+    |-BinaryOperator 0x16d7020 <line:15:5, col:11> 'char' '='
+    | |-MemberExpr 0x16d6fc0 <col:5, col:7> 'char' lvalue .c 0x16d6300
+    | | `-DeclRefExpr 0x16d6fa0 <col:5> 'struct s':'struct s' lvalue Var 0x16d6490 'x' 'struct s':'struct s'
+    | `-ImplicitCastExpr 0x16d7008 <col:11> 'char' <IntegralCast>
+    |   `-CharacterLiteral 0x16d6ff0 <col:11> 'int' 99
+    |-CallExpr 0x16d7210 <line:16:5, col:39> 'int'
+    | |-ImplicitCastExpr 0x16d71f8 <col:5> 'int (*)(const char *, ...)' <FunctionToPointerDecay>
+    | | `-DeclRefExpr 0x16d7040 <col:5> 'int (const char *, ...)' Function 0x16bacc0 'printf' 'int (const char *, ...)'
+    | |-ImplicitCastExpr 0x16d7268 <col:12> 'const char *' <NoOp>
+    | | `-ImplicitCastExpr 0x16d7250 <col:12> 'char *' <ArrayToPointerDecay>
+    | |   `-StringLiteral 0x16d7098 <col:12> 'char [10]' lvalue "%d %u %c\n"
+    | |-ImplicitCastExpr 0x16d7280 <col:26, col:28> 'int' <LValueToRValue>
+    | | `-MemberExpr 0x16d70e0 <col:26, col:28> 'int' lvalue .a 0x16d6238
+    | |   `-DeclRefExpr 0x16d70c0 <col:26> 'struct s':'struct s' lvalue Var 0x16d6490 'x' 'struct s':'struct s'
+    | |-ImplicitCastExpr 0x16d7298 <col:31, col:33> 'unsigned int' <LValueToRValue>
+    | | `-MemberExpr 0x16d7130 <col:31, col:33> 'unsigned int' lvalue .b 0x16d62a0
+    | |   `-DeclRefExpr 0x16d7110 <col:31> 'struct s':'struct s' lvalue Var 0x16d6490 'x' 'struct s':'struct s'
+    | `-ImplicitCastExpr 0x16d72c8 <col:36, col:38> 'int' <IntegralCast>
+    |   `-ImplicitCastExpr 0x16d72b0 <col:36, col:38> 'char' <LValueToRValue>
+    |     `-MemberExpr 0x16d7180 <col:36, col:38> 'char' lvalue .c 0x16d6300
+    |       `-DeclRefExpr 0x16d7160 <col:36> 'struct s':'struct s' lvalue Var 0x16d6490 'x' 'struct s':'struct s'
+    `-ReturnStmt 0x16d7300 <line:17:5, col:12>
+      `-IntegerLiteral 0x16d72e0 <col:12> 'int' 0
+
+
+
+clang -Xclang -ast-dump -fsyntax-only a.c
