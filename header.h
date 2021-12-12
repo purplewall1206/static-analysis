@@ -1,0 +1,5 @@
+
+struct d
+{
+    int e;
+};

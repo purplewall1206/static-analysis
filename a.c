@@ -1,10 +1,13 @@
 #include <stdio.h>
+#include "header.h"
+
 
 struct s
 {
     int a;
     unsigned int b;
     char c;
+    struct d f;
 };
 
 int main()

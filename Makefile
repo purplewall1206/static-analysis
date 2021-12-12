@@ -1,0 +1,26 @@
+parser:	
+	clang++ parser.cpp \
+	-I/home/wangzc/Documents/llvm-project/install/include \
+	-L/home/wangzc/Documents/llvm-project/install/lib \
+	-lclang \
+	-lclangAST \
+	-lclangASTMatchers \
+	-lclangAnalysis \
+	-lclangBasic \
+	-lclangDriver \
+	-lclangEdit \
+	-lclangFrontend \
+	-lclangFrontendTool \
+	-lclangLex \
+	-lclangParse \
+	-lclangSema \
+	-lclangEdit \
+	-lclangRewrite \
+	-lclangRewriteFrontend \
+	-lclangStaticAnalyzerFrontend \
+	-lclangStaticAnalyzerCheckers \
+	-lclangStaticAnalyzerCore \
+	-lclangSerialization \
+	-lclangToolingCore \
+	-lclangTooling \
+	-lclangFormat 
