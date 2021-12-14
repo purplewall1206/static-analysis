@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -isystem /home/wangzc/Documents/llvm-project/install/include
 
-CXX_FLAGS =  -Wall    -fdiagnostics-color=always -fno-rtti -fvisibility-inlines-hidden -g -std=gnu++14
+CXX_FLAGS =  -Wall    -fdiagnostics-color=always -fno-rtti -fvisibility-inlines-hidden -std=gnu++14
 
