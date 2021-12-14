@@ -1,0 +1,7 @@
+/home/wangzc/Documents/static-analysis/template/build/CMakeFiles/rebuild_cache.dir
+/home/wangzc/Documents/static-analysis/template/build/CMakeFiles/clang-tablegen-targets.dir
+/home/wangzc/Documents/static-analysis/template/build/CMakeFiles/acc_gen.dir
+/home/wangzc/Documents/static-analysis/template/build/CMakeFiles/edit_cache.dir
+/home/wangzc/Documents/static-analysis/template/build/CMakeFiles/ct-code-refactor.dir
+/home/wangzc/Documents/static-analysis/template/build/CMakeFiles/omp_gen.dir
+/home/wangzc/Documents/static-analysis/template/build/CMakeFiles/intrinsics_gen.dir
