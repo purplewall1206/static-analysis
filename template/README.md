@@ -15,9 +15,10 @@ make
 
 clang -cc1 -load <build_dir>/lib/libCodeRefactor.dylib -plugin CodeRefactor -plugin-arg-CodeRefactor -class-name -plugin-arg-CodeRefactor Base  -plugin-arg-CodeRefactor -old-name -plugin-arg-CodeRefactor foo  -plugin-arg-CodeRefactor -new-name -plugin-arg-CodeRefactor bar file.cpp
 # 或者
-bin/ct-code-refactor --class-name=Base --new-name=bar --old-name=foo file.cpp  --
+./bin/ct-code-refactor --class-name=Base --new-name=bar --old-name=foo ../file.cpp  --
 ```
 
 主要借鉴了
+
 [llvm-cmake-embedding-llvm-in-your-project]('https://llvm.org/docs/CMake.html#embedding-llvm-in-your-project')   
 [banach-space clang-tutor](https://github.com/banach-space/clang-tutor)  
