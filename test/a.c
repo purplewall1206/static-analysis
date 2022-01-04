@@ -16,6 +16,8 @@ int main()
     x.a = 1;
     x.b = 2;
     x.c = 'c';
-    printf("%d %u %c\n", x.a, x.b, x.c);
+    int *p = &(x.f.e);
+    *p = 3;
+    printf("%d %u %c %d\n", x.a, x.b, x.c, x.f.e);
     return 0;
 }
