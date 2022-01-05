@@ -59,4 +59,6 @@ add_executable(ct-code-refactor CodeRefactor.cpp)
 target_link_libraries(ct-code-refactor clangTooling)
 # add_library(HelloWorld SHARED HelloWorld.cpp)
 
+add_library(CodeRefactor SHARED CodeRefactor.cpp)
+target_include_directories(CodeRefactor PRIVATE CodeRefactor.cpp)
 # target_include_directories(ct-code-refactor PRIVATE )
