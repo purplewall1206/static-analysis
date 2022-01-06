@@ -6,6 +6,32 @@ clang -Wp,-MMD,kernel/.range.o.d -nostdinc -isystem /home/wangzc/Documents/llvm-
 
 
 
+clang -cc1 -Wp,-MMD,kernel/.range.o.d  -isystem /home/wangzc/Documents/llvm-project/install/lib/clang/13.0.0/include -I./arch/x86/include -I./arch/x86/include/generated  -I./include -I./arch/x86/include/uapi -I./arch/x86/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/kconfig.h -include ./include/linux/compiler_types.h -D__KERNEL__  -fmacro-prefix-map=./= -Wall -Wundef -Werror=strict-prototypes -Wno-trigraphs  -fno-common -Werror=implicit-function-declaration -Werror=implicit-int -Werror=return-type -Wno-format-security -std=gnu89 -no-integrated-as -Werror=unknown-warning-option  -fcf-protection=none  -mstack-alignment=8 -mcmodel=kernel -DCONFIG_X86_X32_ABI -Wno-sign-compare  -fno-delete-null-pointer-checks -Wno-frame-address -Wno-address-of-packed-member -O2 -Wframe-larger-than=1024  -Wno-format-invalid-specifier -Wno-gnu -mno-global-merge -Wno-unused-const-variable  -pg -mfentry -DCC_USING_FENTRY -Wdeclaration-after-statement -Wvla -Wno-pointer-sign -Wno-array-bounds -Werror=date-time -Werror=incompatible-pointer-types -Wno-initializer-overrides -Wno-format -Wno-sign-compare -Wno-format-zero-length -Wno-pointer-to-enum-cast -Wno-tautological-constant-out-of-range-compare    -DKBUILD_MODFILE='"kernel/range"' -DKBUILD_BASENAME='"range"' -DKBUILD_MODNAME='"range"' -load ../static-analysis/PrintFunctionNames/build/lib/libPrintFunctionNames.so -plugin print-fns kernel/range.c 
+
+error: unknown warning option '-Wp,-MMD,kernel/.range.o.d'; did you mean '-Wliteral-range'? [-Werror,-Wunknown-warning-option]
+error: unknown argument: '-nostdinc'
+error: unknown argument: '-Qunused-arguments'
+error: unknown argument: '-fno-strict-aliasing'
+error: unknown argument: '-fshort-wchar'
+error: unknown argument: '-fno-PIE'
+error: unknown argument: '-mno-sse'
+error: unknown argument: '-mno-mmx'
+error: unknown argument: '-mno-sse2'
+error: unknown argument: '-mno-3dnow'
+error: unknown argument: '-mno-avx'
+error: unknown argument: '-m64'
+error: unknown argument: '-mno-80387'
+error: unknown argument: '-mtune=generic'
+error: unknown argument: '-mno-red-zone'
+error: unknown argument: '-fno-asynchronous-unwind-tables'
+error: unknown argument: '-fstack-protector-strong'
+error: unknown argument: '-fno-omit-frame-pointer'
+error: unknown argument: '-fno-optimize-sibling-calls'
+error: unknown argument: '-g'
+error: unknown argument '-gdwarf-4'; did you mean '-gdwarf64'?
+error: unknown argument: '-fno-strict-overflow'
+error: unknown argument: '-fno-stack-check'
+
 
 
 
