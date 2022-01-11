@@ -1,99 +1,54 @@
-#include "clang/AST/RecursiveASTVisitor.h"
-#include "clang/Basic/SourceManager.h"
-#include "llvm/Support/raw_ostream.h"
-
 #include "clang/AST/ASTConsumer.h"
-#include "clang/AST/ASTContext.h"
-#include "clang/Basic/SourceManager.h"
-
-#include "clang/Frontend/FrontendAction.h"
+#include "clang/AST/RecursiveASTVisitor.h"
 #include "clang/Frontend/CompilerInstance.h"
-
-#include "clang/Tooling/CommonOptionsParser.h"
+#include "clang/Frontend/FrontendAction.h"
 #include "clang/Tooling/Tooling.h"
-#include "llvm/Support/CommandLine.h"
 
-#include <memory>
-#include <string>
-#include <sstream>
+using namespace clang;
 
-using namespace clang::tooling;
-using namespace llvm;
-
-class DeclVisitor : public clang::RecursiveASTVisitor<DeclVisitor> {
-  clang::SourceManager &SourceManager;
-
+class FindNamedClassVisitor : public RecursiveASTVisitor<FindNamedClassVisitor> {
 public:
-  DeclVisitor(clang::SourceManager &SourceManager)
-      : SourceManager(SourceManager) {}
+  explicit FindNamedClassVisitor(ASTContext *Context)
+    : Context(Context) {}
 
-  bool VisitNamedDecl(clang::NamedDecl *NamedDecl) {
-    llvm::outs() << "Found " << NamedDecl->getQualifiedNameAsString() << " at "
-                 << getDeclLocation(NamedDecl->getBeginLoc()) << "\n";
+  bool VisitCXXRecordDecl(CXXRecordDecl *Declaration) {
+    llvm::outs() << Declaration->getQualifiedNameAsString() << "\n";
+    if (Declaration->getQualifiedNameAsString() == "n::m::C") {
+      FullSourceLoc FullLocation = Context->getFullLoc(Declaration->getBeginLoc());
+      if (FullLocation.isValid())
+        llvm::outs() << "Found declaration at "
+                     << FullLocation.getSpellingLineNumber() << ":"
+                     << FullLocation.getSpellingColumnNumber() << "\n";
+    }
     return true;
   }
 
 private:
-  std::string getDeclLocation(clang::SourceLocation Loc) const {
-    std::ostringstream OSS;
-    OSS << SourceManager.getFilename(Loc).str() << ":"
-        << SourceManager.getSpellingLineNumber(Loc) << ":"
-        << SourceManager.getSpellingColumnNumber(Loc);
-    return OSS.str();
-  }
+  ASTContext *Context;
 };
 
-
-class DeclFinder : public clang::ASTConsumer {
-  clang::SourceManager &SourceManager;
-  DeclVisitor Visitor;
+class FindNamedClassConsumer : public clang::ASTConsumer {
 public:
-  DeclFinder(clang::SourceManager &SM) : SourceManager(SM), Visitor(SM) {}
+  explicit FindNamedClassConsumer(ASTContext *Context)
+    : Visitor(Context) {}
 
-  void HandleTranslationUnit(clang::ASTContext &Context) final {
-    auto Decls = Context.getTranslationUnitDecl()->decls();
-    for (auto &Decl : Decls) {
-      const auto& FileID = SourceManager.getFileID(Decl->getLocation());
-      if (FileID != SourceManager.getMainFileID())
-        continue;
-      Visitor.TraverseDecl(Decl);
-    }
+  virtual void HandleTranslationUnit(clang::ASTContext &Context) {
+    Visitor.TraverseDecl(Context.getTranslationUnitDecl());
   }
+private:
+  FindNamedClassVisitor Visitor;
 };
 
-
-
-class DeclFindingAction : public clang::ASTFrontendAction {
+class FindNamedClassAction : public clang::ASTFrontendAction {
 public:
-  std::unique_ptr<clang::ASTConsumer>
-  CreateASTConsumer(clang::CompilerInstance &CI, clang::StringRef) final {
-    return std::unique_ptr<clang::ASTConsumer>(
-        new DeclFinder(CI.getSourceManager()));
+  virtual std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(
+    clang::CompilerInstance &Compiler, llvm::StringRef InFile) {
+    return std::make_unique<FindNamedClassConsumer>(&Compiler.getASTContext());
   }
 };
 
-static llvm::cl::extrahelp
-    CommonHelp(clang::tooling::CommonOptionsParser::HelpMessage);
-llvm::cl::OptionCategory FindDeclCategory("find-decl options");
-
-#define FIND_DECL_VERSION "0.0.1"
-
-static void PrintVersion() {
-  llvm::outs() << "find-decl version: " << FIND_DECL_VERSION << "\n";
-}
-
-static char FindDeclUsage[] = "find-decl <source file>";
-
-
-int main(int argc, const char **argv) {
-//   llvm::cl::SetVersionPrinter(PrintVersion);
-//   clang::tooling::CommonOptionsParser option(argc, argv);
-//   , FindDeclCategory);
-                                            //  FindDeclUsage);
-    // clang::tooling::CommonOptionsParser option(argc, argv, FindDeclCategory, llvm::cl::OneOrMore, FindDeclUsage);
-    auto option = CommonOptionsParser::create(argc, argv, FindDeclCategory, llvm::cl::OneOrMore, FindDeclUsage);
-    auto files = option->getSourcePathList();
-  clang::tooling::ClangTool tool(option->getCompilations(), files);
-
-  return tool.run(clang::tooling::newFrontendActionFactory<DeclFindingAction>().get());
+int main(int argc, char **argv) {
+  if (argc > 1) {
+    clang::tooling::runToolOnCode(std::make_unique<FindNamedClassAction>(), argv[1]);
+  }
 }
