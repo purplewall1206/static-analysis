@@ -1,7 +1,0 @@
-/home/wangzc/Documents/static-analysis/FindClassDecls/build/CMakeFiles/rebuild_cache.dir
-/home/wangzc/Documents/static-analysis/FindClassDecls/build/CMakeFiles/clang-tablegen-targets.dir
-/home/wangzc/Documents/static-analysis/FindClassDecls/build/CMakeFiles/acc_gen.dir
-/home/wangzc/Documents/static-analysis/FindClassDecls/build/CMakeFiles/edit_cache.dir
-/home/wangzc/Documents/static-analysis/FindClassDecls/build/CMakeFiles/omp_gen.dir
-/home/wangzc/Documents/static-analysis/FindClassDecls/build/CMakeFiles/find-class-decls.dir
-/home/wangzc/Documents/static-analysis/FindClassDecls/build/CMakeFiles/intrinsics_gen.dir

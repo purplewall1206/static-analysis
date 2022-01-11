@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC  -Wall    -fdiagnostics-color=always -fno-rtti -fvisibility-inlines-hidden -shared  -o lib/libPrintFunctionNames.so CMakeFiles/PrintFunctionNames.dir/PrintFunctionNames.cpp.o 
