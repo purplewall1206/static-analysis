@@ -1,0 +1,6 @@
+            +- 0: input, "a.c", c
+         +- 1: preprocessor, {0}, cpp-output
+      +- 2: compiler, {1}, ir
+   +- 3: backend, {2}, assembler
++- 4: assembler, {3}, object
+5: linker, {4}, image

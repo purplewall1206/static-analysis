@@ -1,2 +1,2 @@
 # static-analysis
-clang -Xclang -ast-dump -fsyntax-only a.c
+clang -Xclang -ast-dump -fno-color-diagnostics -fsyntax-only a.c
