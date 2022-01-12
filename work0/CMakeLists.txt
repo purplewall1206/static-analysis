@@ -63,7 +63,14 @@ target_link_libraries(work0
   clangIndex
   clangRewrite  
   clangTooling)
-# add_library(HelloWorld SHARED HelloWorld.cpp)
+add_library(work SHARED work0.cpp)
+target_link_libraries(work0 
+  clangAST
+  clangBasic
+  clangFrontend
+  clangIndex
+  clangRewrite  
+  clangTooling)
 
 # add_library(CodeRefactor SHARED CodeRefactor.cpp)
 # target_include_directories(CodeRefactor PRIVATE CodeRefactor.cpp)

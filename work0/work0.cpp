@@ -3,6 +3,7 @@
 #include "clang/Frontend/CompilerInstance.h"
 #include "clang/Frontend/FrontendAction.h"
 #include "clang/Tooling/Tooling.h"
+#include "clang/Frontend/FrontendPluginRegistry.h"
 
 using namespace clang;
 
@@ -12,6 +13,7 @@ public:
     : Context(Context) {}
 
   bool VisitCXXRecordDecl(CXXRecordDecl *Declaration) {
+    Declaration->dump();
     llvm::outs() << Declaration->getQualifiedNameAsString() << "\n";
     if (Declaration->getQualifiedNameAsString() == "n::m::C") {
       FullSourceLoc FullLocation = Context->getFullLoc(Declaration->getBeginLoc());
@@ -33,7 +35,14 @@ public:
     : Visitor(Context) {}
 
   virtual void HandleTranslationUnit(clang::ASTContext &Context) {
+    auto Decls = Context.getTranslationUnitDecl()->decls();
+    llvm::outs() << "test" << "\n";
+    for (auto &Decl : Decls) {
+      llvm::outs() << Decl << "\n";
+    }
     Visitor.TraverseDecl(Context.getTranslationUnitDecl());
+
+
   }
 private:
   FindNamedClassVisitor Visitor;
@@ -47,8 +56,27 @@ public:
   }
 };
 
+
+class FindNameClassPluginAction : public PluginASTAction {
+public:
+std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(
+    clang::CompilerInstance &Compiler, llvm::StringRef InFile) {
+      llvm::outs() << "plugin ast action" << "\n";
+    return std::make_unique<FindNamedClassConsumer>(&Compiler.getASTContext());
+  }
+
+  bool ParseArgs(const CompilerInstance &CI,
+                 const std::vector<std::string> &args) override {
+                   llvm::outs() << "parseargs" << "\n";
+                   return true;
+                 }
+};
+
 int main(int argc, char **argv) {
   if (argc > 1) {
     clang::tooling::runToolOnCode(std::make_unique<FindNamedClassAction>(), argv[1]);
   }
 }
+
+
+static FrontendPluginRegistry::Add<FindNameClassPluginAction> X("findname","--");
