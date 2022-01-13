@@ -18,9 +18,9 @@ public:
     void HandleTranslationUnit(clang::ASTContext &Context) {
         auto Decls = Context.getTranslationUnitDecl()->decls();
         for (auto &Decl : Decls) {
-            const auto& FileID = manager->getFileID(Decl->getLocation());
-            if (FileID != manager->getMainFileID())
-                continue;
+            // const auto& FileID = manager->getFileID(Decl->getLocation());
+            // if (FileID != manager->getMainFileID())
+            //     continue;
             visitor.TraverseDecl(Decl);
         }
     }

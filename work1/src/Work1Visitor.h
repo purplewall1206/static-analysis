@@ -8,12 +8,16 @@
 #include <string>
 #include <sstream>
 
-class WorkVisitor : public clang::RecursiveASTVisitor<WorkVisitor> {
+// The RecursiveASTVisitor provides hooks of the form bool VisitNodeType(NodeType *) for most AST nodes; the exception are TypeLoc nodes, which are passed by-value. We only need to implement the methods for the relevant node types.
+
+class WorkVisitor : public clang::RecursiveASTVisitor<WorkVisitor>
+{
 private:
 	clang::ASTContext *context;
 	clang::SourceManager *manager;
 
-	std::string getDeclLocation(clang::SourceLocation Loc) const {
+	std::string getDeclLocation(clang::SourceLocation Loc) const
+	{
 		std::ostringstream OSS;
 		OSS << (manager->getFilename(Loc)).data() << ":"
 			<< manager->getSpellingLineNumber(Loc) << ":"
@@ -24,10 +28,53 @@ private:
 public:
 	WorkVisitor(clang::ASTContext *context, clang::SourceManager *manager)
 		: context(context), manager(manager) {}
-	
-	bool VisitNamedDecl(clang::NamedDecl *NamedDecl) {
-		llvm::outs() << "Found " << NamedDecl->getQualifiedNameAsString() << " at "
-                 << getDeclLocation(NamedDecl->getBeginLoc()) << "\n";
-    	return true;
+
+	bool VisitNamedDecl(clang::NamedDecl *NamedDecl)
+	{
+		// llvm::outs() << "Found " << NamedDecl->getQualifiedNameAsString() << " at "
+		// 			 << getDeclLocation(NamedDecl->getBeginLoc()) << "\n";
+		return true;
+	}
+
+	bool VisitDecl(clang::Decl *Decl)
+	{
+		// llvm::outs() << "Found Decl " << Decl->getDeclKindName() << " at "
+		// 			 << getDeclLocation(Decl->getBeginLoc()) << "\n";
+		return true;
+	}
+
+	bool VisitFunctionDecl(clang::FunctionDecl *FD)
+	{
+		return true;
+	}
+
+	bool VisitCXXRecordDecl(clang::CXXRecordDecl *Declaration)
+	{
+		// Declaration->dump();
+		// llvm::outs() << "\n\n\n";
+		// if (Declaration->getQualifiedNameAsString() == "n::m::C")
+		// {
+		// 	clang::FullSourceLoc FullLocation = context->getFullLoc(Declaration->getBeginLoc());
+		// 	if (FullLocation.isValid())
+		// 		llvm::outs() << "Found declaration at "
+		// 					 << FullLocation.getSpellingLineNumber() << ":"
+		// 					 << FullLocation.getSpellingColumnNumber() << "\n";
+		// }
+		return true;
+	}
+
+	bool VisitRecordDecl(clang::RecordDecl *Declaration)
+	{
+		Declaration->dump();
+
+		clang::FullSourceLoc FullLocation = context->getFullLoc(Declaration->getBeginLoc());
+		if (FullLocation.isValid())
+			llvm::outs() << "Found declaration at "
+						 << Declaration->getQualifiedNameAsString() << ":"
+						 << Declaration->getDeclName() << ":"
+						 << FullLocation.getSpellingLineNumber() << ":"
+						 << FullLocation.getSpellingColumnNumber() << "\n";
+		llvm::outs() << "\n";
+		return true;
 	}
 };
