@@ -15,6 +15,7 @@ class WorkVisitor : public clang::RecursiveASTVisitor<WorkVisitor>
 private:
 	clang::ASTContext *context;
 	clang::SourceManager *manager;
+	std::unordered_map<llvm::StringRef, Decl> alldecls;
 
 	std::string getDeclLocation(clang::SourceLocation Loc) const
 	{
@@ -28,6 +29,10 @@ private:
 public:
 	WorkVisitor(clang::ASTContext *context, clang::SourceManager *manager)
 		: context(context), manager(manager) {}
+
+	std::unordered_map<llvm::StringRef, Decl> getAlldecls() {
+		return alldecls;
+	}
 
 	bool VisitNamedDecl(clang::NamedDecl *NamedDecl)
 	{
@@ -65,13 +70,13 @@ public:
 
 	bool VisitRecordDecl(clang::RecordDecl *Declaration)
 	{
-		Declaration->dump();
+		// Declaration->dump();
 
 		clang::FullSourceLoc FullLocation = context->getFullLoc(Declaration->getBeginLoc());
 		if (FullLocation.isValid())
 			llvm::outs() << "Found declaration at "
 						 << Declaration->getQualifiedNameAsString() << ":"
-						 << Declaration->getDeclName() << ":"
+						 << getDeclLocation(Declaration->getBeginLoc()) << ":"
 						 << FullLocation.getSpellingLineNumber() << ":"
 						 << FullLocation.getSpellingColumnNumber() << "\n";
 		llvm::outs() << "\n";
