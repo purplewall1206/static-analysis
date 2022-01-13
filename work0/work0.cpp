@@ -25,6 +25,8 @@ public:
     return true;
   }
 
+  
+
 private:
   ASTContext *Context;
 };
@@ -38,12 +40,24 @@ public:
     auto Decls = Context.getTranslationUnitDecl()->decls();
     llvm::outs() << "test" << "\n";
     for (auto &Decl : Decls) {
-      llvm::outs() << Decl << "\n";
+      Decl->dump();
+      llvm::outs()  << "\n\n\n";
     }
     Visitor.TraverseDecl(Context.getTranslationUnitDecl());
-
-
   }
+
+  bool HandleTopLevelDecl(DeclGroupRef DG) override {
+    for (DeclGroupRef::iterator i = DG.begin(), e = DG.end(); i != e; ++i) {
+      const Decl *D = *i;
+      if (const NamedDecl *ND = dyn_cast<NamedDecl>(D))
+        llvm::errs() << "top-level-decl: \"" << ND->getNameAsString() << "\"\n";
+    D->dump();
+      llvm::outs() << "\n\n\n";
+    }
+
+    return true;
+  }
+
 private:
   FindNamedClassVisitor Visitor;
 };
