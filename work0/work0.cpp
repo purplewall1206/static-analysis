@@ -25,6 +25,10 @@ public:
     return true;
   }
 
+  bool VisitNamedDecl(clang::NamedDecl *NamedDecl) {
+    llvm::outs() << "visitor nameddecl: " << NamedDecl->getQualifiedNameAsString() << "\n";
+    return true;
+  }
   
 
 private:

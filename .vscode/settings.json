@@ -80,5 +80,6 @@
         "utility": "cpp",
         "stop_token": "cpp",
         "cinttypes": "cpp"
-    }
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }

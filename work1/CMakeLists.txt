@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.13.4)
-project(template)
+project(work1)
 
 # set(CT_Clang_INSTALL_DIR "$ENV{LLVM_DIR}" CACHE PATH
 #   "Clang installation directory")
@@ -54,18 +54,24 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
 # available for the sub-projects.
 #===============================================================================\
 
-add_executable(ct-code-refactor CodeRefactor.cpp)
+add_executable(work1 src/work1.cpp)
 
-target_link_libraries(ct-code-refactor clangTooling)
-# add_library(HelloWorld SHARED HelloWorld.cpp)
-
-add_library(CodeRefactor SHARED CodeRefactor.cpp)
-target_include_directories(CodeRefactor PRIVATE CodeRefactor.cpp)
-target_link_libraries(CodeRefactor
+target_link_libraries(work1 
   clangAST
   clangBasic
   clangFrontend
   clangIndex
   clangRewrite  
   clangTooling)
+add_library(WORK1 MODULE src/work1.cpp)
+target_link_libraries(work1 
+  clangAST
+  clangBasic
+  clangFrontend
+  clangIndex
+  clangRewrite  
+  clangTooling)
+
+# add_library(CodeRefactor SHARED CodeRefactor.cpp)
+# target_include_directories(CodeRefactor PRIVATE CodeRefactor.cpp)
 # target_include_directories(ct-code-refactor PRIVATE )
