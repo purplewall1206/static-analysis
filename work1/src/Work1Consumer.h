@@ -22,6 +22,8 @@ public:
             // if (FileID != manager->getMainFileID())
             //     continue;
             visitor.TraverseDecl(Decl);
+            
         }
+        visitor.print();
     }
 };
