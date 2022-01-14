@@ -83,7 +83,9 @@ public:
 		llvm::outs() << "\n";
 		if (Declaration->getKindName() == "struct") {
 			auto Name = Declaration->getName();
-			alldecls[Name.data()] = Declaration;
+			std::string key = Name.data();
+			key = "struct " + key;
+			alldecls[key] = Declaration;
 		}
 		
 

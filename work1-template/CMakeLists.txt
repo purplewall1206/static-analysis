@@ -65,13 +65,13 @@ target_link_libraries(work1
   clangTooling)
 
 add_library(WORK1 MODULE src/work1.cpp)
-target_link_libraries(work1 
-  clangAST
-  clangBasic
-  clangFrontend
-  clangIndex
-  clangRewrite  
-  clangTooling)
+# target_link_libraries(WORK1
+#   clangAST
+#   clangBasic
+#   clangFrontend
+#   clangIndex
+#   clangRewrite  
+#   clangTooling)
 
 # add_library(CodeRefactor SHARED CodeRefactor.cpp)
 # target_include_directories(CodeRefactor PRIVATE CodeRefactor.cpp)

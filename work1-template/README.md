@@ -7,6 +7,7 @@ clang -c -Xclang -load -Xclang lib/libWORK1.so -Xclang -plugin -Xclang trigger .
 clang -cc1 -load lib/libWORK1.so -plugin trigger ../test/a.c
 
 目标：
-* struct声明
-* 全局变量声明
-* struct之间依赖关系
+* struct声明:`HandleTranslationUnit`
+* 全局变量声明:`HandleTopLevelDecl1
+* struct之间依赖关系:`HandleTopLevelDecl->RecordDecl->fieldDecls`
+
