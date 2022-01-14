@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.13.4)
 project(work1)
 
-# set(CT_Clang_INSTALL_DIR "$ENV{LLVM_DIR}" CACHE PATH
-#   "Clang installation directory")
+set(CT_Clang_INSTALL_DIR "$ENV{LLVM_DIR}" CACHE PATH
+  "Clang installation directory")
 
-# set(CT_LLVM_INCLUDE_DIR "${CT_Clang_INSTALL_DIR}/include/llvm")
+set(CT_LLVM_INCLUDE_DIR "${CT_Clang_INSTALL_DIR}/include/llvm")
 
-# set(CT_LLVM_CMAKE_FILE
-#   "${CT_Clang_INSTALL_DIR}/lib/cmake/clang/ClangConfig.cmake")
+set(CT_LLVM_CMAKE_FILE
+  "${CT_Clang_INSTALL_DIR}/lib/cmake/clang/ClangConfig.cmake")
 
 
 #===============================================================================
@@ -63,6 +63,7 @@ target_link_libraries(work1
   clangIndex
   clangRewrite  
   clangTooling)
+
 add_library(WORK1 MODULE src/work1.cpp)
 target_link_libraries(work1 
   clangAST

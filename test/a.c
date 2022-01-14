@@ -11,6 +11,8 @@ struct s
     struct d *h;
 };
 
+int g;
+
 int main()
 {
     struct s x;
@@ -20,5 +22,6 @@ int main()
     x.h = &x.f;
     int *p = &(x.f.e);
     *p = 3;
+    g = 10;
     return 0;
 }
