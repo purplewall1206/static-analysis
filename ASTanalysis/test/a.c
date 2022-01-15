@@ -1,7 +1,6 @@
 // #include <stdio.h>
 #include "header.h"
 
-
 struct s
 {
     int a;
@@ -12,8 +11,8 @@ struct s
 };
 
 int g;
-struct s ss;
-int gg = 1;
+extern int eg;
+struct d dd;
 
 int main()
 {
@@ -25,5 +24,6 @@ int main()
     int *p = &(x.f.e);
     *p = 3;
     g = 10;
+    eg = 11;
     return 0;
 }

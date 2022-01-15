@@ -6,6 +6,8 @@ target triple = "x86_64-unknown-linux-gnu"
 %struct.s = type { i32, i32, i8, %struct.d, %struct.d* }
 %struct.d = type { i32 }
 
+@g = dso_local global i32 0, align 4
+
 ; Function Attrs: noinline nounwind optnone uwtable
 define dso_local i32 @main() #0 {
   %1 = alloca i32, align 4
@@ -26,6 +28,7 @@ define dso_local i32 @main() #0 {
   store i32* %10, i32** %3, align 8
   %11 = load i32*, i32** %3, align 8
   store i32 3, i32* %11, align 4
+  store i32 10, i32* @g, align 4
   ret i32 0
 }
 
