@@ -1,5 +1,53 @@
 #pragma once
 
+class Relates
+{
+public:
+    std::string namea;
+    std::string nameb;
+    int type;
+    // 0- not sure, 1-contain,2-ref
+
+    Relates(std::string namea, std::string nameb, int type)
+        : namea(namea), nameb(nameb), type(type)
+    {
+    }
+
+    std::string genRelatedDB()
+    {
+        std::string res = "insert into related (namea, nameb, type) values ";
+        res = res + "\"" + namea + "\", \"" + nameb + "\"," + std::to_string(type) + ");";
+        return res;
+    }
+};
+
+class Structs
+{
+public:
+    std::string name;
+    std::string file;
+    int extrainfo;
+    // not used
+    // std::vector<Relates*> relatedstructs;
+
+    Structs(std::string name, std::string file)
+        : name(name), file(file)
+    {
+        extrainfo = 0;
+    }
+    Structs(std::string name, std::string file, int extrainfo)
+        : name(name), file(file), extrainfo(extrainfo)
+    {
+    }
+
+    std::string genStructsDB()
+    {
+        std::string res = "insert into structs (name, file, extrainfo) values ";
+        res = res + "(\"" + name + "\", \"" + file + "\", " + std::to_string(extrainfo) + ");";
+        return res;
+    }
+};
+
 class GlobalVaribles
 {
 private:
@@ -28,7 +76,8 @@ public:
         file = Sfile;
     }
 
-    void print() {
+    void print()
+    {
         llvm::outs() << Sname << ":" << Stype << ":" << Sfile << "\n";
     }
 
