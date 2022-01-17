@@ -28,5 +28,6 @@ int main()
     *p = 3;
     g = 10;
     eg = 11;
+    head = 100;
     return 0;
 }

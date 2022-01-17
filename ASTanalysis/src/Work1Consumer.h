@@ -39,7 +39,9 @@ public:
             std::string Name = decls.first;
             clang::RecordDecl *decl = decls.second;
             // auto rtype = decl->getTypeForDecl();
-            llvm::outs() << decl->getName() << "---" << decl->getKindName() << "---\n";
+            llvm::outs() << decl->getName() << "---" 
+                         << ":" << manager->getFilename(decl->getBeginLoc())
+                         << ":" << decl->getKindName() << "---\n";
 
             for (clang::RecordDecl::field_iterator i = decl->field_begin(), e = decl->field_end();
                  i != e; i++)

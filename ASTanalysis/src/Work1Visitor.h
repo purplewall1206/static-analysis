@@ -52,32 +52,32 @@ public:
 
 	bool VisitVarDecl(clang::VarDecl *decl)
 	{
-		split();
-		clang::QualType qtype = decl->getType();
-		llvm::outs() << "visitVarDecl :" << decl->getNameAsString()
-					 << ":" << qtype.getAsString()
-					 << ":";
-		if (qtype->isRecordType())
-		{
-			llvm::outs() << "record type";
-		}
-		else if (qtype->isPointerType())
-		{
+		// split();
+		// clang::QualType qtype = decl->getType();
+		// llvm::outs() << "visitVarDecl :" << decl->getNameAsString()
+		// 			 << ":" << qtype.getAsString()
+		// 			 << ":";
+		// if (qtype->isRecordType())
+		// {
+		// 	llvm::outs() << "record type";
+		// }
+		// else if (qtype->isPointerType())
+		// {
 
-			llvm::outs() << "pointer type";
-			// llvm::outs() << "\nxxxxxxxxxxxxxx:"
-			// 			 << decl->getDeclKindName() //VAR
-			// 			 << ":" << decl->getDeclName(); //name
-			if (qtype->isRecordType())
-			{
-				llvm::outs() << ":sub type is record type?";
-			}
-		}
-		else if (qtype->isArrayType())
-		{
-			llvm::outs() << "array type";
-		}
-		llvm::outs() << "\n";
+		// 	llvm::outs() << "pointer type";
+		// 	// llvm::outs() << "\nxxxxxxxxxxxxxx:"
+		// 	// 			 << decl->getDeclKindName() //VAR
+		// 	// 			 << ":" << decl->getDeclName(); //name
+		// 	if (qtype->isRecordType())
+		// 	{
+		// 		llvm::outs() << ":sub type is record type?";
+		// 	}
+		// }
+		// else if (qtype->isArrayType())
+		// {
+		// 	llvm::outs() << "array type";
+		// }
+		// llvm::outs() << "\n";
 		return true;
 	}
 
