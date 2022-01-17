@@ -13,7 +13,7 @@ public:
     }
 
     bool ParseArgs(const clang::CompilerInstance &CI, const std::vector<std::string> &args) override{
-        llvm::outs() << "parseargs" << "\n";
+        // llvm::outs() << "parseargs" << "\n";
         return true;
     }
 };

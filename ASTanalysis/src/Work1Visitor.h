@@ -12,7 +12,7 @@
 
 // The RecursiveASTVisitor provides hooks of the form bool VisitNodeType(NodeType *) for most AST nodes; the exception are TypeLoc nodes, which are passed by-value. We only need to implement the methods for the relevant node types.
 
-bool split()
+void split()
 {
 	std::string s = "scott>=tiger>=mushroom";
 	std::string delimiter = ">=";
