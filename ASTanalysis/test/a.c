@@ -13,6 +13,9 @@ struct s
 int g;
 extern int eg;
 struct d dd;
+struct d *pdd;
+int lg[100];
+struct d ldd[100];
 
 int main()
 {

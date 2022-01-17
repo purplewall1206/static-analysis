@@ -8,6 +8,8 @@ clang -cc1 -load lib/libWORK1.so -plugin trigger ../test/a.c
 
 目标：
 * struct声明:`HandleTranslationUnit`
-* 全局变量声明:`HandleTopLevelDecl1
+* 全局变量声明:`HandleTopLevelDecl`
 * struct之间依赖关系:`HandleTopLevelDecl->RecordDecl->fieldDecls`
 
+1. 收集struct里面的具体定义
+2. 收集全局变量 `HandleTopLevelDecl`

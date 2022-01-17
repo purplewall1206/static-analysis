@@ -7,6 +7,7 @@
 #include "clang/Basic/SourceManager.h"
 #include "clang/AST/AST.h"
 #include "llvm/Support/raw_ostream.h"
+#include "entity.h"
 
 class WorkConsumer : public clang::ASTConsumer
 {
@@ -14,6 +15,7 @@ private:
     clang::SourceManager *manager;
     WorkVisitor visitor;
     std::unordered_map<std::string, clang::RecordDecl *> alldecls;
+    std::unordered_map<std::string, GlobalVaribles*> allGlobalVariables;
 
 public:
     WorkConsumer(clang::ASTContext *context, clang::SourceManager *manager)
@@ -31,12 +33,12 @@ public:
         }
         visitor.print();
 
-        alldecls = visitor.getAlldecls();
+        alldecls = visitor.getRecorddecls();
         for (auto decls : alldecls)
         {
             std::string Name = decls.first;
             clang::RecordDecl *decl = decls.second;
-            auto rtype = decl->getTypeForDecl();
+            // auto rtype = decl->getTypeForDecl();
             llvm::outs() << decl->getName() << "---" << decl->getKindName() << "---\n";
 
             for (clang::RecordDecl::field_iterator i = decl->field_begin(), e = decl->field_end();
@@ -61,27 +63,34 @@ public:
         // visitor.TraverseDecl(Decl);
         for (clang::DeclGroupRef::iterator i = DG.begin(), e = DG.end(); i != e; ++i)
         {
-            const clang::Decl *D = *i;
-            // clang::RecordDecl *RD;
-            if (const clang::NamedDecl *ND = llvm::dyn_cast<clang::NamedDecl>(D))
-            {
-                llvm::errs() << "top-level-decl: " << ND->getNameAsString()
-                             << ":" << ND->getDeclKindName()
-                             << ":" << manager->getFilename(ND->getBeginLoc())
-                             << "\n";
-                // cast to RecordDecl
-                // if (ND->getDeclKindName() == "Record") {
-                //     if (RD = llvm::dyn_cast<clang::RecordDecl>(D->getDeclContext())) {
-                //         llvm::outs() << "   recordDecl- " << RD->getName() << ":";
-                //         // for (clang::FieldDeclarator start = RD->field_begin(), end = RD->field_end();
-                //         //     start != end; ++start) {
-                //         //         clang::FieldDecl *FD = *start;
-                //         //         llvm::outs() << FD->getType()->getTypeClassName() << "\n";
-                //         //     }
-                //     }
-                // }
-                // llvm::outs() << "\n\n";
+            // const clang::Decl *D = *i;
+            const clang::VarDecl *VD =  llvm::dyn_cast<clang::VarDecl>(*i);
+            // clang::QualType qtype = VD->getType();
+            // qtype.dump();
+            
+            if (VD) {
+                VD->getType().dump();
+                llvm::outs() << VD->getNameAsString() 
+                             << ":" << VD->getType().getAsString() 
+                             << ":ispointerType:" << VD->getType()->isPointerType()
+                             << ":isarrytype" << VD->getType()->isArrayType()
+                             << ":" << manager->getFilename(VD->getBeginLoc())
+                             << "\n\n";
             }
+            
+            // if (const clang::NamedDecl *ND = llvm::dyn_cast<clang::NamedDecl>(D))
+            // {
+            //     llvm::errs() << "top-level-decl: " << ND->getNameAsString()
+            //                  << ":" << ND->getDeclKindName()
+            //                  << ":" << manager->getFilename(ND->getBeginLoc())
+            //                  << "\n";
+            //     std::string vartype = ND->getDeclKindName();
+            //     if (vartype == "Var") {
+            //         const clang::VarDecl *VD = llvm::dyn_cast<clang::VarDecl>(D);
+            //         llvm::outs() << "VD : " << VD->getType().getAsString() << "\n";
+            //     }
+                
+            // }
         }
 
         return true;
