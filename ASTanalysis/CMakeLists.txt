@@ -1,13 +1,13 @@
 cmake_minimum_required(VERSION 3.13.4)
 project(work1)
 
-set(CT_Clang_INSTALL_DIR "$ENV{LLVM_DIR}" CACHE PATH
-  "Clang installation directory")
+# set(CT_Clang_INSTALL_DIR "$ENV{LLVM_DIR}" CACHE PATH
+#   "Clang installation directory")
 
-set(CT_LLVM_INCLUDE_DIR "${CT_Clang_INSTALL_DIR}/include/llvm")
+# set(CT_LLVM_INCLUDE_DIR "${CT_Clang_INSTALL_DIR}/include/llvm")
 
-set(CT_LLVM_CMAKE_FILE
-  "${CT_Clang_INSTALL_DIR}/lib/cmake/clang/ClangConfig.cmake")
+# set(CT_LLVM_CMAKE_FILE
+#   "${CT_Clang_INSTALL_DIR}/lib/cmake/clang/ClangConfig.cmake")
 
 
 #===============================================================================
@@ -54,24 +54,20 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib")
 # available for the sub-projects.
 #===============================================================================\
 
-add_executable(work1 src/work1.cpp)
+# add_executable(work1 src/work1.cpp)
 
-target_link_libraries(work1 
-  clangAST
-  clangBasic
-  clangFrontend
-  clangIndex
-  clangRewrite  
-  clangTooling)
-
-add_library(WORK1 MODULE src/work1.cpp)
-# target_link_libraries(WORK1
+# target_link_libraries(work1 
 #   clangAST
 #   clangBasic
 #   clangFrontend
 #   clangIndex
 #   clangRewrite  
-#   clangTooling)
+#   clangTooling
+#   sqlite3)
+
+add_library(ASTPARSER SHARED src/work1.cpp)
+target_link_libraries(ASTPARSER
+  sqlite3)
 
 # add_library(CodeRefactor SHARED CodeRefactor.cpp)
 # target_include_directories(CodeRefactor PRIVATE CodeRefactor.cpp)

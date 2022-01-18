@@ -8,6 +8,7 @@
 #include "clang/AST/AST.h"
 #include "llvm/Support/raw_ostream.h"
 #include "entity.h"
+#include <sqlite3.h>
 
 class WorkConsumer : public clang::ASTConsumer
 {
@@ -16,9 +17,10 @@ private:
     WorkVisitor visitor;
     std::unordered_map<std::string, clang::RecordDecl *> alldecls;
     // std::unordered_map<std::string, GlobalVaribles*> allGlobalVariables;
-    std::vector<GlobalVaribles*> allGVs;
-    std::vector<Structs*> allSTs;
-    std::vector<Relates*> allREs;
+    std::vector<GlobalVaribles *> allGVs;
+    std::vector<Structs *> allSTs;
+    std::vector<Relates *> allREs;
+
 public:
     WorkConsumer(clang::ASTContext *context, clang::SourceManager *manager)
         : manager(manager), visitor(context, manager) {}
@@ -27,8 +29,8 @@ public:
     {
         auto Decls = Context.getTranslationUnitDecl()->decls();
 
-        llvm::outs() << "In file : " << manager->getFilename(manager->getLocForStartOfFile(manager->getMainFileID())) << "\n";
-        llvm::outs() << "    get " << allGVs.size() << " global variables\n";
+        std::cout << "\e[1;32mfile : " << manager->getFilename(manager->getLocForStartOfFile(manager->getMainFileID())).data() << "\e[0m\n";
+        std::cout << "    get " << allGVs.size() << " global variables\n";
 
         for (auto &Decl : Decls)
         {
@@ -47,12 +49,13 @@ public:
             {
                 clang::FieldDecl *field = *i;
                 std::string gettype = field->getType().getAsString();
-              
+
                 if (gettype.find("struct ") != std::string::npos)
                 {
-                    std::string nameb = field->getNameAsString();
+                    std::string nameb = field->getType().getAsString();
                     int type = 1;
-                    if (gettype.find(" *") != std::string::npos) {
+                    if (gettype.find(" *") != std::string::npos)
+                    {
                         type = 2;
                     }
                     allREs.push_back(new Relates(Name, nameb, type));
@@ -71,39 +74,89 @@ public:
     {
         for (clang::DeclGroupRef::iterator i = DG.begin(), e = DG.end(); i != e; ++i)
         {
-            const clang::VarDecl *VD =  llvm::dyn_cast<clang::VarDecl>(*i);
-            if (VD) {
+            const clang::VarDecl *VD = llvm::dyn_cast<clang::VarDecl>(*i);
+            if (VD)
+            {
                 std::string name = VD->getNameAsString();
                 std::string type = VD->getType().getAsString();
                 std::string file = manager->getFilename(VD->getBeginLoc()).data();
+                std::string currFile = manager->getFilename(manager->getLocForStartOfFile(manager->getMainFileID())).data();
                 int extrainfo = 0;
-                if (VD->getType()->isPointerType()) {
+                if (VD->getType()->isPointerType())
+                {
                     extrainfo = 1;
-                } else if (VD->getType()->isRecordType()) {
+                }
+                else if (VD->getType()->isRecordType())
+                {
                     extrainfo = 2;
-                } else if (VD->getType()->isArrayType()) {
+                }
+                else if (VD->getType()->isArrayType())
+                {
                     extrainfo = 3;
                 }
-                allGVs.push_back(new GlobalVaribles(name, type, file, extrainfo));
+                allGVs.push_back(new GlobalVaribles(name, type, file, extrainfo, currFile));
             }
         }
 
-        
         return true;
     }
 
-
-    void insertDB() {
-        for (auto x : allGVs) {
-            llvm::outs() << x->genDB() << "\n";
+    void insertDB()
+    {
+        sqlite3 *db;
+        int res = sqlite3_open("ast.db", &db);
+        int success = 0;
+        int failed = 0;
+        if (res)
+        {
+            //database failed to open
+            std::cout << "    Database failed to open" << std::endl;
         }
+        else
+        {
+            //your database code here
+            std::cout << "    connected ast.db" << std::endl;
 
-        for (auto x : allSTs) {
-            llvm::outs() << x->genStructsDB() << "\n";
+            res = sqlite3_exec(db, Structs::createTable.data(), nullptr, 0, nullptr);
+            res = sqlite3_exec(db, GlobalVaribles::createTable.data(), nullptr, 0, nullptr);
+            res = sqlite3_exec(db, Relates::createTable.data(), nullptr, 0, nullptr);
+
+            for (auto x : allGVs)
+            {
+                // llvm::outs() << x->genDB().data() << "\n";
+                res = sqlite3_exec(db, x->genDB().data(),nullptr, 0, nullptr);
+                // llvm::outs() << "executed " << (res == SQLITE_OK) << "\n";
+                stat(res, success, failed);
+            }
+
+            for (auto x : allSTs)
+            {
+                res = sqlite3_exec(db, x->genStructsDB().data(),nullptr, 0, nullptr);
+                stat(res, success, failed);
+            }
+
+            for (auto x : allREs)
+            {
+                // llvm::outs() << x->genRelatedDB().data() << "\n";
+                res = sqlite3_exec(db, x->genRelatedDB().data(),nullptr, 0, nullptr);
+                // llvm::outs() << "executed " << (res == SQLITE_OK) << "\n";
+                stat(res, success, failed);
+            }
         }
+        llvm::outs() << "    commited \e[32m" << success << " sqls, \e[31m" << failed << " failed\e[0m\n";
+        
+        sqlite3_close(db);
+    }
 
-        for (auto x : allREs) {
-            llvm::outs() << x->genRelatedDB() << "\n";
+    void stat(int res, int &success, int &failed)
+    {
+        if (res != SQLITE_OK)
+        {
+            failed++;
+        }
+        else
+        {
+            success++;
         }
     }
 };

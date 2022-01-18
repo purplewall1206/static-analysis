@@ -2,9 +2,9 @@
 
 ./bin/work1 "namespace n { namespace m { class C {}; } }"
 
-clang -c -Xclang -load -Xclang lib/libWORK1.so -Xclang -plugin -Xclang trigger ../test/a.c 
+clang -c -Xclang -load -Xclang lib/libASTPARSER.so -Xclang -plugin -Xclang ASTparser ../test/a.c 
 
-clang -cc1 -load lib/libWORK1.so -plugin trigger ../test/a.c
+clang -cc1 -load lib/libASTPARSER.so -plugin ASTparser ../test/a.c
 
 目标：
 * struct声明:`HandleTranslationUnit`
