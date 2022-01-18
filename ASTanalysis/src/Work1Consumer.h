@@ -128,9 +128,9 @@ public:
             //your database code here
             std::cout << "    connected ast.db" << std::endl;
 
-            res = sqlite3_exec(db, Structs::createTable.data(), nullptr, 0, nullptr);
-            res = sqlite3_exec(db, GlobalVaribles::createTable.data(), nullptr, 0, nullptr);
-            res = sqlite3_exec(db, Relates::createTable.data(), nullptr, 0, nullptr);
+            res = sqlite3_exec(db, StructscreateTable.data(), nullptr, 0, nullptr);
+            res = sqlite3_exec(db, GlobalVariblescreateTable.data(), nullptr, 0, nullptr);
+            res = sqlite3_exec(db, RelatescreateTable.data(), nullptr, 0, nullptr);
 
             for (auto x : allGVs)
             {

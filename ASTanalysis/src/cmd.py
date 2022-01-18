@@ -5,17 +5,16 @@ with open('compile-output', 'r') as f:
 
 with open('ast-parser.sh', 'w') as f:
     for cmd in cmds:
+        if cmd.find('.S') != -1:
+            continue
         posstart = cmd.find('-o ')
         posend = cmd.find('.o ')
         prefix = cmd[:posstart]
         objectfile = cmd[posstart+2:posend]
-
         res = prefix
         res = res + ' -emit-llvm -S -o ' + objectfile + '.ll ' + objectfile + '.c '
         res = res + '-Xclang -load -Xclang ../static-analysis/ASTanalysis/build/lib/libASTPARSER.so -Xclang -plugin -Xclang ASTparser;\n'
-        # print(res)
         f.write(res)
-        # f.write('\n')
 
 
 

@@ -6,7 +6,7 @@ public:
     std::string namea;
     std::string nameb;
     int type;
-    const static std::string createTable;
+    // static std::string createTable;
     // 0- not sure, 1-contain,2-ref，3-function pointer
 
     Relates(std::string namea, std::string nameb, int type)
@@ -23,7 +23,7 @@ public:
 
 };
 
-const std::string Relates::createTable = "create table if not exists Relates (id integer PRIMARY KEY AUTOINCREMENT, namea text, nameb text, type integer);";
+std::string RelatescreateTable = "create table if not exists Relates (id integer PRIMARY KEY AUTOINCREMENT, namea text, nameb text, type integer);";
 
 class Structs
 {
@@ -31,7 +31,7 @@ public:
     std::string name;
     std::string file;
     int extrainfo;
-    const static std::string createTable;
+    // static std::string createTable;
     // not used
     // std::vector<Relates*> relatedstructs;
     
@@ -54,7 +54,7 @@ public:
 
 };
 
-const std::string Structs::createTable = "create table if not exists structs (id integer PRIMARY KEY AUTOINCREMENT,name text , file text, extrainfo integer, CONSTRAINT individual UNIQUE (name,file));";
+std::string StructscreateTable = "create table if not exists structs (id integer PRIMARY KEY AUTOINCREMENT,name text , file text, extrainfo integer, CONSTRAINT individual UNIQUE (name,file));";
 // const std::string Structs::createTable = "create table if not exists structs (id integer PRIMARY KEY AUTOINCREMENT,name text unique, file text, extrainfo integer);";
 
 
@@ -73,7 +73,7 @@ public:
     std::string Sfile;
     int extrainfo;
     std::string currFile;
-    const static std::string createTable;
+    // static std::string createTable;
     // 0-nothing, 1-pointer, 2-struct,3-array
 
     GlobalVaribles(std::string Sname, std::string Stype, std::string Sfile)
@@ -108,4 +108,4 @@ public:
 
 };
 
-const std::string GlobalVaribles::createTable = "create table if not exists globalvars(id integer PRIMARY KEY AUTOINCREMENT, name text, type text, file text, extrainfo integer, currfile text);";
+std::string GlobalVariblescreateTable = "create table if not exists globalvars(id integer PRIMARY KEY AUTOINCREMENT, name text, type text, file text, extrainfo integer, currfile text);";
