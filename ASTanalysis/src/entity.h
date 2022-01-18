@@ -7,7 +7,7 @@ public:
     std::string nameb;
     int type;
     const static std::string createTable;
-    // 0- not sure, 1-contain,2-ref
+    // 0- not sure, 1-contain,2-ref，3-function pointer
 
     Relates(std::string namea, std::string nameb, int type)
         : namea(namea), nameb(nameb), type(type)
@@ -54,7 +54,8 @@ public:
 
 };
 
-const std::string Structs::createTable = "create table if not exists structs (id integer PRIMARY KEY AUTOINCREMENT,name text unique, file text, extrainfo integer);";
+const std::string Structs::createTable = "create table if not exists structs (id integer PRIMARY KEY AUTOINCREMENT,name text , file text, extrainfo integer, CONSTRAINT individual UNIQUE (name,file));";
+// const std::string Structs::createTable = "create table if not exists structs (id integer PRIMARY KEY AUTOINCREMENT,name text unique, file text, extrainfo integer);";
 
 
 class GlobalVaribles

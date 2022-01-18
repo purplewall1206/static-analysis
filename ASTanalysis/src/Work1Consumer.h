@@ -49,17 +49,24 @@ public:
             {
                 clang::FieldDecl *field = *i;
                 std::string gettype = field->getType().getAsString();
-
+                int type = 1;
                 if (gettype.find("struct ") != std::string::npos)
                 {
                     std::string nameb = field->getType().getAsString();
-                    int type = 1;
+
                     if (gettype.find(" *") != std::string::npos)
                     {
                         type = 2;
+                        allREs.push_back(new Relates(Name, nameb, type));
                     }
+                }
+                if (field->getType()->isFunctionPointerType())
+                {
+                    type = 3;
+                    std::string nameb = field->getNameAsString();
                     allREs.push_back(new Relates(Name, nameb, type));
                 }
+                
             }
 
             allSTs.push_back(curr);
@@ -94,6 +101,10 @@ public:
                 {
                     extrainfo = 3;
                 }
+                else if (VD->getType()->isFunctionPointerType())
+                {
+                    extrainfo = 4;
+                }
                 allGVs.push_back(new GlobalVaribles(name, type, file, extrainfo, currFile));
             }
         }
@@ -124,35 +135,36 @@ public:
             for (auto x : allGVs)
             {
                 // llvm::outs() << x->genDB().data() << "\n";
-                res = sqlite3_exec(db, x->genDB().data(),nullptr, 0, nullptr);
+                res = sqlite3_exec(db, x->genDB().data(), nullptr, 0, nullptr);
                 // llvm::outs() << "executed " << (res == SQLITE_OK) << "\n";
-                stat(res, success, failed);
+                stat(res, success, failed, x->genDB());
             }
 
             for (auto x : allSTs)
             {
-                res = sqlite3_exec(db, x->genStructsDB().data(),nullptr, 0, nullptr);
-                stat(res, success, failed);
+                res = sqlite3_exec(db, x->genStructsDB().data(), nullptr, 0, nullptr);
+                stat(res, success, failed, x->genStructsDB().data());
             }
 
             for (auto x : allREs)
             {
                 // llvm::outs() << x->genRelatedDB().data() << "\n";
-                res = sqlite3_exec(db, x->genRelatedDB().data(),nullptr, 0, nullptr);
+                res = sqlite3_exec(db, x->genRelatedDB().data(), nullptr, 0, nullptr);
                 // llvm::outs() << "executed " << (res == SQLITE_OK) << "\n";
-                stat(res, success, failed);
+                stat(res, success, failed, x->genRelatedDB());
             }
         }
         llvm::outs() << "    commited \e[32m" << success << " sqls, \e[31m" << failed << " failed\e[0m\n";
-        
+
         sqlite3_close(db);
     }
 
-    void stat(int res, int &success, int &failed)
+    void stat(int res, int &success, int &failed, std::string sql)
     {
         if (res != SQLITE_OK)
         {
             failed++;
+            std::cout << "    failed :" << sql << std::endl;
         }
         else
         {

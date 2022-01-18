@@ -8,6 +8,7 @@ struct s
     char c;
     struct d f;
     struct d *h;
+    void (*func)(int a, int b);
 };
 
 int g;
@@ -29,5 +30,6 @@ int main()
     g = 10;
     eg = 11;
     head = 100;
+    x.func(1, 2);
     return 0;
 }
