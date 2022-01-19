@@ -18,14 +18,15 @@ class WorkVisitor : public clang::RecursiveASTVisitor<WorkVisitor>
 private:
 	clang::ASTContext *context;
 	clang::SourceManager *manager;
-	std::unordered_map<std::string, clang::RecordDecl *> recorddecls;
+	// std::unordered_map<std::string, clang::RecordDecl *> recorddecls;
+	std::vector<std::pair<std::string, clang::RecordDecl *>> recorddecls;
 	std::unordered_map<std::string, clang::VarDecl *> vardecls;
 
 public:
 	WorkVisitor(clang::ASTContext *context, clang::SourceManager *manager)
 		: context(context), manager(manager) {}
 
-	std::unordered_map<std::string, clang::RecordDecl *> getRecorddecls()
+	std::vector<std::pair<std::string, clang::RecordDecl *>> getRecorddecls()
 	{
 		return recorddecls;
 	}
@@ -39,12 +40,15 @@ public:
 
 	bool VisitRecordDecl(clang::RecordDecl *decl)
 	{
-		// llvm::outs() << "visit record decl " << decl->getName() << "\n";
-		if (decl->getKindName() == "struct")
+		// llvm::outs() << "visit record decl ";
+		// llvm::outs() << decl->getNameAsString() << "\n";
+		if (decl != nullptr && decl->getKindName() == "struct")
 		{
+			// llvm::outs() << "    visit record decl " << decl->getName() << "\n";
 			
 			std::string Name = decl->getNameAsString();
-			recorddecls[Name] = decl;
+			// recorddecls[Name] = decl;
+			recorddecls.push_back(make_pair(Name, decl));
 		}
 		return true;
 	}
