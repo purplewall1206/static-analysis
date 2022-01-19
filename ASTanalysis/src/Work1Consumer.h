@@ -169,7 +169,7 @@ public:
         if (res != SQLITE_OK)
         {
             failed++;
-            std::cout << "    failed :" << sql << std::endl;
+            // std::cout << "    failed :" << sql << std::endl;
         }
         else
         {
