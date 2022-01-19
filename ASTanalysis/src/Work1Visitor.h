@@ -39,7 +39,7 @@ public:
 
 	bool VisitRecordDecl(clang::RecordDecl *decl)
 	{
-		llvm::outs() << "-------------visit record decl\n";
+		// llvm::outs() << "visit record decl " << decl->getName() << "\n";
 		if (decl->getKindName() == "struct")
 		{
 			

@@ -74,7 +74,7 @@ public:
         llvm::outs() << "    get " << allSTs.size() << " structures\n";
         llvm::outs() << "    get " << allREs.size() << " relations\n";
 
-        insertDB();
+        // insertDB();
     }
 
     bool HandleTopLevelDecl(clang::DeclGroupRef DG) override
@@ -86,8 +86,11 @@ public:
             {
                 std::string name = VD->getNameAsString();
                 std::string type = VD->getType().getAsString();
-                std::string file = manager->getFilename(VD->getBeginLoc()).data();
-                std::string currFile = manager->getFilename(manager->getLocForStartOfFile(manager->getMainFileID())).data();
+                // llvm::outs() << "\e[32m" << name << "\e[0m:" << manager->getFilename(VD->getBeginLoc()) << "|\n";
+                llvm::StringRef fileRef = manager->getFilename(VD->getBeginLoc());
+                std::string file = fileRef.empty() ? "" : fileRef.data();
+                llvm::StringRef currFileRef = manager->getFilename(manager->getLocForStartOfFile(manager->getMainFileID()));
+                std::string currFile = currFileRef.empty() ? "" : currFileRef.data();
                 int extrainfo = 0;
                 if (VD->getType()->isPointerType())
                 {
