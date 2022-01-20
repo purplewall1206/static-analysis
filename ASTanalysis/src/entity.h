@@ -102,7 +102,7 @@ public:
     std::string genDB()
     {
         std::string res = "insert into globalvars(name, type, file,  extrainfo,currfile) values ";
-        res = res + "(\"" + Sname + "\",\"" + Stype + "\",\"" + Sfile + "\"," + std::to_string(extrainfo) + ", \"," + currFile + "\");";
+        res = res + "(\"" + Sname + "\",\"" + Stype + "\",\"" + Sfile + "\"," + std::to_string(extrainfo) + ", \"" + currFile + "\");";
         return res;
     }
 
