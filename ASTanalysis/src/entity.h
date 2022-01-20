@@ -23,7 +23,7 @@ public:
 
 };
 
-std::string RelatescreateTable = "create table if not exists Relates (id integer PRIMARY KEY AUTOINCREMENT, namea text, nameb text, type integer);";
+std::string RelatescreateTable = "create table if not exists Relates (id integer PRIMARY KEY AUTOINCREMENT, namea text, nameb text, type integer, CONSTRAINT individual UNIQUE (namea, nameb));";
 
 class Structs
 {

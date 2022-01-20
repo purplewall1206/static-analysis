@@ -52,15 +52,15 @@ public:
                 clang::FieldDecl *field = *i;
                 std::string gettype = field->getType().getAsString();
                 int type = 1;
-                if (gettype.find("struct ") != std::string::npos)
+                if (gettype.find("struct") != std::string::npos)
                 {
                     std::string nameb = field->getType().getAsString();
 
                     if (gettype.find(" *") != std::string::npos)
                     {
                         type = 2;
-                        allREs.push_back(new Relates(Name, nameb, type));
                     }
+                    allREs.push_back(new Relates(Name, nameb, type));
                 }
                 if (field->getType()->isFunctionPointerType())
                 {
@@ -120,7 +120,7 @@ public:
     void insertDB()
     {
         sqlite3 *db;
-        int res = sqlite3_open("ast.db", &db);
+        int res = sqlite3_open("ast-20220120.db", &db);
         int success = 0;
         int failed = 0;
         if (res)
