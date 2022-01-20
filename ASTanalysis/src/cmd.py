@@ -3,16 +3,22 @@ cmds = []
 with open('compile-output', 'r') as f:
     cmds = f.readlines()
 
+count = 0
 with open('ast-parser.sh', 'w') as f:
     for cmd in cmds:
+        if cmd == '\n':
+            continue        
         if cmd.find('.S') != -1:
             continue
         posstart = cmd.find('-o ')
         posend = cmd.find('.o ')
         prefix = cmd[:posstart]
         objectfile = cmd[posstart+2:posend]
-        res = prefix
-        res = res + ' -emit-llvm -S -o ' + objectfile + '.ll ' + objectfile + '.c '
+        res = 'echo ' + str(count) + ';\n'
+        count = count + 1
+        res = res + prefix
+        # res = res + ' -emit-llvm -S -o ' + objectfile + '.ll ' + objectfile + '.c '
+        res = res + '  -o  ' + objectfile + '.o  ' + objectfile + '.c '
         res = res + '-Xclang -load -Xclang ../static-analysis/ASTanalysis/build/lib/libASTPARSER.so -Xclang -plugin -Xclang ASTparser;\n'
         f.write(res)
 
