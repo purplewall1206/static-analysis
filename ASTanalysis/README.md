@@ -21,3 +21,12 @@ clang -cc1 -load lib/libASTPARSER.so -plugin ASTparser ../test/a.c
 * driver structs: 48606, `SELECT * FROM structs WHERE file like 'drivers%' or file like './drivers%'`
 * fs structs : 3038  `SELECT * FROM structs WHERE file like 'fs%' or './fs%`
 * 全局变量 10640221 `select DISTINCT * from globalvars `
+
+
+globalvar里面file的那列本来想要表示函数调用，但是并不准确，会默认把所有include转变成ast
+
+因此想要确定使用了哪些，需要使用IR分析
+
+**通过AST判断函数或者全局变量是否被使用，是不准确的，因为AST会默认把所有include转成ast**，统计函数和全局变量在哪，还是非常准的
+
+TODO: 通过file那一列，把函数分成kernel和driver

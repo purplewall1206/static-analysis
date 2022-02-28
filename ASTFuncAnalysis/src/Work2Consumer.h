@@ -36,7 +36,7 @@ public:
 
         std::cout << "\e[1;32mfile : " << manager->getFilename(manager->getLocForStartOfFile(manager->getMainFileID())).data() << "\e[0m\n";
         std::cout << "    get " << allFuncDeclarations.size() << " function decls\n";
-        std::cout << "    get " << allFuncUses.size() << " function uses\n";
+        // std::cout << "    get " << allFuncUses.size() << " function uses\n";
         std::cout << "    get " << allFuncParams.size() << " function paramters\n";
         // std::cout << "    get " << allGVs.size() << " global variables\n";
 
@@ -189,10 +189,10 @@ public:
                 stat(res, success, failed, x->genDB());
             }
 
-            for (auto &x : allFuncUses) {
-                res = sqlite3_exec(db, x->genDB().data(), nullptr, 0, nullptr);
-                stat(res, success, failed, x->genDB());
-            }
+            // for (auto &x : allFuncUses) {
+            //     res = sqlite3_exec(db, x->genDB().data(), nullptr, 0, nullptr);
+            //     stat(res, success, failed, x->genDB());
+            // }
 
             for (auto &x : allFuncParams) {
                 res = sqlite3_exec(db, x->genDB().data(), nullptr, 0, nullptr);
