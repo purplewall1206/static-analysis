@@ -41,7 +41,7 @@ namespace {
 	std::string stCreateTable = "create table if not exists irstructs(id integer PRIMARY KEY AUTOINCREMENT, name text, file text, count integer, extra text);";
 
 	std::string insertsql(std::string table, std::string name, std::string file, int count) {
-		std::string res = "insert into " + table + "(";
+		std::string res = "insert into " + table + "(name, file, count) values(";
 		res = res + "\"" + name 
 				  + "\", \"" + file
 				  + "\", " + std::to_string(count)
@@ -59,9 +59,23 @@ namespace {
         bool runOnModule(Module &M) override;
     };
 
+	void stat(int res, int &success, int &failed, std::string sql)
+    {
+        if (res != SQLITE_OK)
+        {
+            failed++;
+            // std::cout << "    failed :" << sql << std::endl;
+        }
+        else
+        {
+            success++;
+        }
+    }
+
     bool IRUsageModulePass::runOnModule(Module &M) {
         LLVMContext& CTX = M.getContext();
-		std::string currFile = M.getSourceFileName();
+		std::string currFile = M.getName();
+		
 		std::cout << currFile << std::endl;
         // GlobalVariable* tg = M.getGlobalVariable("hg");
 
@@ -86,7 +100,7 @@ namespace {
 		// }
 
 		for (auto& F : M) {
-			outs() << F.getName() << "\n";
+			// outs() << F.getName() << "\n";
 			for (auto& BB : F) {
 				for (auto& I : BB) {
 					// outs() << "    " << I << "\n";
@@ -113,7 +127,7 @@ namespace {
 						if (F) {
 							// outs() << "        ++ " << F->getName() << "\n";
 							std::string fname = F->getName().data();
-							if (fname.find("llvm.dbg") != std::string::npos) {
+							if (fname.find("llvm") != std::string::npos) {
 								continue;
 							}
 							functions[fname]++;
@@ -143,24 +157,24 @@ namespace {
 			// outs() << "global vars \n\n";
 			for (auto &gv : globalvaribles) {
 				// outs() << "    " << gv.first << ":" << gv.second << "\n";
-				std::string sql = insertsql("", gv.first, currFile, gv.second);
-				res = sqlite(db, sql , nullptr, 0, nullptr);
+				std::string sql = insertsql("irglobalvaribles", gv.first, currFile, gv.second);
+				res = sqlite3_exec(db, sql.data() , nullptr, 0, nullptr);
 				stat(res, success, failed, sql);
 			}
 
 			// outs() << "\n\nfunctions \n\n";
 			for (auto &func : functions) {
 				// outs() << "    " << func.first << ":" << func.second << "\n";
-				std::string sql = insertsql("", func.first, currFile, func.second);
-				res = sqlite(db, sql , nullptr, 0, nullptr);
+				std::string sql = insertsql("irfunctions", func.first, currFile, func.second);
+				res = sqlite3_exec(db, sql.data() , nullptr, 0, nullptr);
 				stat(res, success, failed, sql);
 			}
 
 			// outs() << "\n\nstructs \n\n";
 			for (auto &st : structs) {
 				// outs() << "    " << st.first << ":" << st.second << "\n";
-				std::string sql = insertsql("", st.first, currFile, st.second);
-				res = sqlite(db, sql , nullptr, 0, nullptr);
+				std::string sql = insertsql("irstructs", st.first, currFile, st.second);
+				res = sqlite3_exec(db, sql.data() , nullptr, 0, nullptr);
 				stat(res, success, failed, sql);
 			}
 		}
@@ -174,18 +188,7 @@ namespace {
         return true;
     }
 
-	void stat(int res, int &success, int &failed, std::string sql)
-    {
-        if (res != SQLITE_OK)
-        {
-            failed++;
-            // std::cout << "    failed :" << sql << std::endl;
-        }
-        else
-        {
-            success++;
-        }
-    }
+
 char IRUsageModulePass::ID = 0;
 
 static RegisterPass<IRUsageModulePass> X(
