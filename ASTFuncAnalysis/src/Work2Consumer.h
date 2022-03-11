@@ -37,7 +37,7 @@ public:
         std::cout << "\e[1;32mfile : " << manager->getFilename(manager->getLocForStartOfFile(manager->getMainFileID())).data() << "\e[0m\n";
         std::cout << "    get " << allFuncDeclarations.size() << " function decls\n";
         // std::cout << "    get " << allFuncUses.size() << " function uses\n";
-        std::cout << "    get " << allFuncParams.size() << " function paramters\n";
+        // std::cout << "    get " << allFuncParams.size() << " function paramters\n";
         // std::cout << "    get " << allGVs.size() << " global variables\n";
 
         // for (auto &Decl : Decls)
@@ -88,11 +88,15 @@ public:
 
     bool HandleTopLevelDecl(clang::DeclGroupRef DG) override
     {
-        llvm::StringRef currFile = manager->getFilename(manager->getLocForStartOfFile(manager->getMainFileID()));
+        // llvm::StringRef currFile = manager->getFilename(manager->getLocForStartOfFile(manager->getMainFileID()));
         for (clang::DeclGroupRef::iterator i = DG.begin(), e = DG.end(); i != e; ++i)
         {
             const clang::FunctionDecl *FD = llvm::dyn_cast<clang::FunctionDecl>(*i);
+
             if (FD) {
+                const clang::FunctionDecl *FI = FD->getDefinition();
+                FD = FI;
+                if (!FD) continue;
                 std::string name = FD->getNameAsString();
                 llvm::StringRef fileRef = manager->getFilename(FD->getBeginLoc());
                 std::string file = fileRef.empty() ? "" : fileRef.data();
@@ -101,26 +105,26 @@ public:
                 
                 
                 
-                allFuncUses.push_back(new FunctionUse(name, currFile.data()));
+                // allFuncUses.push_back(new FunctionUse(name, currFile.data()));
 
-                bool isDecl = (fileRef == currFile);
+                // bool isDecl = (fileRef == currFile);
                 // std::cout << name << ":" << retType.getAsString() << ":" << currFile.data() << ":" << file << ":" << isDecl << ":" << FD->isImplicit() << "\n" << std::endl;
 
-                if (isDecl) {
+                // if (isDecl) {
                     // std::cout << name << ":" << retType.getAsString() << std::endl;
                     allFuncDeclarations.push_back(new FunctionDeclaration(name, retType.getAsString(), file));
-                    if (FD->param_empty()) {
-                        continue;
-                    }
-                    for (auto *i = FD->param_begin(); i != FD->param_end(); i++) {
-                        const clang::ParmVarDecl *PVD = *i;
-                        llvm::StringRef pvdnameRef = PVD->getName();
-                        std::string pvdname = pvdnameRef.data();
-                        clang::QualType pvdType = PVD->getType();
-                        // std::cout << "    " << pvdname << ":" << pvdType.getAsString() << std::endl;
-                        allFuncParams.push_back(new Param(pvdname, pvdType.getAsString(), name));
-                    }
-                }
+                    // if (FD->param_empty()) {
+                    //     continue;
+                    // }
+                    // for (auto *i = FD->param_begin(); i != FD->param_end(); i++) {
+                    //     const clang::ParmVarDecl *PVD = *i;
+                    //     llvm::StringRef pvdnameRef = PVD->getName();
+                    //     std::string pvdname = pvdnameRef.data();
+                    //     clang::QualType pvdType = PVD->getType();
+                    //     // std::cout << "    " << pvdname << ":" << pvdType.getAsString() << std::endl;
+                    //     allFuncParams.push_back(new Param(pvdname, pvdType.getAsString(), name));
+                    // }
+                // }
             }
         }
         // for (clang::DeclGroupRef::iterator i = DG.begin(), e = DG.end(); i != e; ++i)
@@ -162,7 +166,7 @@ public:
     void insertDB()
     {
         sqlite3 *db;
-        int res = sqlite3_open("ast-20220228.db", &db);
+        int res = sqlite3_open("ast-20220311-func.db", &db);
         int success = 0;
         int failed = 0;
         if (res)
@@ -178,9 +182,9 @@ public:
             // res = sqlite3_exec(db, StructscreateTable.data(), nullptr, 0, nullptr);
             // res = sqlite3_exec(db, GlobalVariblescreateTable.data(), nullptr, 0, nullptr);
             // res = sqlite3_exec(db, RelatescreateTable.data(), nullptr, 0, nullptr);
-            sqlite3_exec(db, FunctionUsescreateTable.data(), nullptr, 0, nullptr);
+            // sqlite3_exec(db, FunctionUsescreateTable.data(), nullptr, 0, nullptr);
             sqlite3_exec(db, FunctionDeclarationscreateTable.data(), nullptr, 0, nullptr);
-            sqlite3_exec(db, ParamscreateTable.data(), nullptr, 0, nullptr);
+            // sqlite3_exec(db, ParamscreateTable.data(), nullptr, 0, nullptr);
 
             
             for (auto &x : allFuncDeclarations) {
@@ -194,10 +198,10 @@ public:
             //     stat(res, success, failed, x->genDB());
             // }
 
-            for (auto &x : allFuncParams) {
-                res = sqlite3_exec(db, x->genDB().data(), nullptr, 0, nullptr);
-                stat(res, success, failed, x->genDB());
-            }
+            // for (auto &x : allFuncParams) {
+            //     res = sqlite3_exec(db, x->genDB().data(), nullptr, 0, nullptr);
+            //     stat(res, success, failed, x->genDB());
+            // }
 
             // for (auto x : allGVs)
             // {
