@@ -33,8 +33,8 @@ public:
     {
         auto Decls = Context.getTranslationUnitDecl()->decls();
 
-        std::cout << "\e[1;32mfile : " << manager->getFilename(manager->getLocForStartOfFile(manager->getMainFileID())).data() << "\e[0m\n";
-        std::cout << "    get " << allGVs.size() << " global variables\n";
+        // std::cout << "\e[1;32mfile : " << manager->getFilename(manager->getLocForStartOfFile(manager->getMainFileID())).data() << "\e[0m\n";
+        // std::cout << "    get " << allGVs.size() << " global variables\n";
 
         for (auto &Decl : Decls)
         {
@@ -49,6 +49,7 @@ public:
             clang::RecordDecl *defn = decl->getDefinition();
             if (defn) {
                 decl = defn;
+                continue;
             } 
             // else {
             //     std::cout << "xxxxxxx- " << Name << std::endl;
@@ -83,7 +84,7 @@ public:
 
             allSTs.insert(curr);
         }
-        llvm::outs() << "    get " << allSTs.size() << " structures\n";
+        // llvm::outs() << "    get " << allSTs.size() << " structures\n";
 
         // for (auto st : allSTs) {
         //     std::cout << "        " << st->name << " : " << st->file << std::endl;
@@ -135,7 +136,7 @@ public:
     void insertDB()
     {
         sqlite3 *db;
-        int res = sqlite3_open("ast-20220120.db", &db);
+        int res = sqlite3_open("ast-20220311.db", &db);
         int success = 0;
         int failed = 0;
         if (res)
@@ -146,7 +147,7 @@ public:
         else
         {
             //your database code here
-            std::cout << "    connected ast.db" << std::endl;
+            // std::cout << "    connected ast.db" << std::endl;
 
             res = sqlite3_exec(db, StructscreateTable.data(), nullptr, 0, nullptr);
             // res = sqlite3_exec(db, GlobalVariblescreateTable.data(), nullptr, 0, nullptr);
@@ -174,7 +175,7 @@ public:
             //     stat(res, success, failed, x->genRelatedDB());
             // }
         }
-        llvm::outs() << "    commited \e[32m" << success << " sqls, \e[31m" << failed << " failed\e[0m\n";
+        // llvm::outs() << "    commited \e[32m" << success << " sqls, \e[31m" << failed << " failed\e[0m\n";
 
         sqlite3_close(db);
     }
