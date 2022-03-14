@@ -143,7 +143,7 @@ namespace {
 		}
 
 		sqlite3 *db;
-		int res = sqlite3_open("ir-20220314.db", &db);
+		int res = sqlite3_open("ir-20220314-usage.db", &db);
 		int success = 0;
 		int failed = 0;
 		if (res) {

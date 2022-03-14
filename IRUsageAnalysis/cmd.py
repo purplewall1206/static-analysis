@@ -17,6 +17,8 @@ with open('ir-perfile-usage.sh', 'w') as f:
         posend = cmd.find('.o ')
         prefix = cmd[:posstart]
         objectfile = cmd[posstart+2:posend]
+        tmpobjfile = objectfile
+        objectfile = tmpobjfile[:tmpobjfile.rfind('/')+1] + tmpobjfile[tmpobjfile.rfind('/')+6:]
         res = 'echo ' + str(count) + ';\n'
         count = count + 1
         res = res + prefix
