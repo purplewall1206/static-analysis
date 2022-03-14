@@ -108,6 +108,7 @@ namespace {
 					for (Value *Op : I.operands()) {
 						if (GlobalValue* G = dyn_cast<GlobalVariable>(Op)) {
 							// outs() << "global " << *G << ":" << *(G->getType()) << "\n";
+						
 							++globalvaribles[G->getName().data()];
 							// outs() << "        ++ " << G->getName() << "\n";
 						}
@@ -142,7 +143,7 @@ namespace {
 		}
 
 		sqlite3 *db;
-		int res = sqlite3_open("ir-20220301.db", &db);
+		int res = sqlite3_open("ir-20220314.db", &db);
 		int success = 0;
 		int failed = 0;
 		if (res) {

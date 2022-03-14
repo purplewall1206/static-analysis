@@ -47,10 +47,12 @@ public:
             std::string Name = decls.first;
             clang::RecordDecl *decl = decls.second;
             clang::RecordDecl *defn = decl->getDefinition();
-            if (defn) {
-                decl = defn;
+            // 没有definition选择跳过
+            if (!defn) {
+                
                 continue;
             } 
+            decl = defn;
             // else {
             //     std::cout << "xxxxxxx- " << Name << std::endl;
             // }
@@ -136,7 +138,7 @@ public:
     void insertDB()
     {
         sqlite3 *db;
-        int res = sqlite3_open("ast-20220311.db", &db);
+        int res = sqlite3_open("ast-20220311-define.db", &db);
         int success = 0;
         int failed = 0;
         if (res)

@@ -135,7 +135,7 @@ public:
     }
 };
 
-std::string FunctionDeclarationscreateTable = "CREATE TABLE functiondeclarations (id	INTEGER,name	TEXT,rettype	TEXT,file	TEXT,PRIMARY KEY(id AUTOINCREMENT));";
+std::string FunctionDeclarationscreateTable = "CREATE TABLE functiondeclarations (id	INTEGER,name	TEXT,rettype	TEXT,file	TEXT,CONSTRAINT \"individual\" UNIQUE(\"name\",\"file\",\"rettype\"),PRIMARY KEY(id AUTOINCREMENT));";
 
 class FunctionDeclaration
 {
