@@ -143,7 +143,7 @@ namespace {
 		}
 
 		sqlite3 *db;
-		int res = sqlite3_open("ir-20220314-usage.db", &db);
+		int res = sqlite3_open("ir-20220512-usage.db", &db);
 		int success = 0;
 		int failed = 0;
 		if (res) {
@@ -156,12 +156,12 @@ namespace {
 
 
 			// outs() << "global vars \n\n";
-			for (auto &gv : globalvaribles) {
-				// outs() << "    " << gv.first << ":" << gv.second << "\n";
-				std::string sql = insertsql("irglobalvaribles", gv.first, currFile, gv.second);
-				res = sqlite3_exec(db, sql.data() , nullptr, 0, nullptr);
-				stat(res, success, failed, sql);
-			}
+			// for (auto &gv : globalvaribles) {
+			// 	// outs() << "    " << gv.first << ":" << gv.second << "\n";
+			// 	std::string sql = insertsql("irglobalvaribles", gv.first, currFile, gv.second);
+			// 	res = sqlite3_exec(db, sql.data() , nullptr, 0, nullptr);
+			// 	stat(res, success, failed, sql);
+			// }
 
 			// outs() << "\n\nfunctions \n\n";
 			for (auto &func : functions) {

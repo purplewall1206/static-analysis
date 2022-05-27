@@ -3,6 +3,14 @@ cmds = []
 with open('clangs-llvm-10.txt', 'r') as f:
     cmds = f.readlines()
 
+cmds_0512 = []
+with open('clangs-llvm-0512.txt', 'r') as f:
+    cmds_0512 = f.readlines()
+
+cmd_diff = list(
+    set(cmds_0512).difference(set(cmds))
+)
+
 count = 0
 
 opts = []
